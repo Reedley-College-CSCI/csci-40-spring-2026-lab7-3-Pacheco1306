@@ -15,8 +15,8 @@ const int MAX_DAYS = 31;
 // Function Prototypes
 void readTemperatures(TemperatureRecord arr[], int& size); // TODO: Fix the parameters
 void printTemperatures(const TemperatureRecord arr[], int size);
-TemperatureRecord findMin(const ???);
-TemperatureRecord findMax(const ???);
+TemperatureRecord findMin( const TemperatureRecord arr[], int size);
+TemperatureRecord findMax(const TemperatureRecord arr[], int size);
 double findAverage(const TemperatureRecord arr[], int size);
 
 int main() {
@@ -35,18 +35,26 @@ int main() {
     int size = 0;  // Actual number of records read
 
     // TODO: Step 3 - Call readTemperatures() to load data from file
-    TemperatureRecord records[MAX_DAYS];
+     TemperatureRecord records[MAX_DAYS];
+    int size = 0;  // Actual number of records read
+
+    // TODO: Step 3 - Call readTemperatures() to load data from file
     readTemperatures(records, size);
+
     // TODO: Step 4 - Print the temperatures
-    cout << "Temperature Records:";
+    cout << "Temperature Records:" << endl;
     printTemperatures(records, size);
 
-    void printTemperatures(const TemperatureRecord arr[], int size) {
-        cout << "Day\tTemp" << endl;
+    // TODO: Step 5 - Compute and display min, max, and average temperature
+    TemperatureRecord minTemp = findMin(records, size);
+    TemperatureRecord maxTemp = findMax(records, size);
+    double avg = findAverage(records, size);
 
-        for (int i = 0; i < size; i++) {
-            cout << arr[i].day << "\t" << arr[i].temperature << endl;
-        }
+    cout << "Lowest Temperature: Day " << minTemp.day << " Temp " << minTemp.temperature << endl;
+    cout << "Highest Temperature: Day " << maxTemp.day << " Temp " << maxTemp.temperature << endl;
+    cout << "Average Temperature: " << avg << endl;
+
+    return 0;
     }
     // TODO: Step 5 - Compute and display min, max, and average temperature
     double avg = findAverage(records, size);
@@ -69,15 +77,60 @@ int main() {
 
 // TODO: Step 6 - Implement readTemperatures()
 // Read from "temps.txt" and store data in the array
+void readTemperatures(TemperatureRecord arr[], int& size) {
+    ifstream inputFile("temps.txt");
 
+    size = 0;
+
+    while (inputFile >> arr[size].day >> arr[size].temperature && size < MAX_DAYS) {
+        size++;
+    }
+
+    inputFile.close();
+}
 // TODO: Step 7 - Implement printTemperatures()
 // Print all stored temperatures in a formatted table
+void printTemperature(const temperatureRecord arr[], int size) {
+    cout << "Day Temp" << endl;
 
+    for (int i = 0; i < size; i++) {
+        cout << arr[i].day << " " << arr[i].temperature << endl;
+    }
+}
 // TODO: Step 8 - Implement findMin()
 // Return the TemperatureRecord with the lowest temperature
+TemperatureRecord findMin(const TemperatureRecord arr[], int size) {
+    TemperatureRecord min = arr[0];
 
+    for (int i = 1; i < size; i++) {
+        if (arr[i].temperature < min.temperature) {
+            min = arr[i];
+        }
+    }
+
+    return min;
+}
 // TODO: Step 9 - Implement findMax()
 // Return the TemperatureRecord with the highest temperature
+TemperatureRecord findMax(const TemperatureRecord arr[], int size) {
+    TemperatureRecord max = arr[0];
 
+    for (int i = 1; i < size; i++) {
+        if (arr[i].temperature > max.temperature) {
+            max = arr[i];
+        }
+    }
+
+    return max;
+}
 // TODO: Step 10 - Implement findAverage()
 // Compute and return the average temperature
+double findAverage(const TemperatureRecord arr[], int size) {
+    int sum = 0;
+
+    for (int i = 0; i < size; i++) {
+        sum += arr[i].temperature;
+    }
+
+    return (double)sum / size;
+}
